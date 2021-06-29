@@ -1,23 +1,36 @@
 import logo from './logo.svg';
 import './App.css';
+import api from './service/api';
 
 function App() {
+
+  function StartModal() {
+    console.log("START MODAL");
+  }
+
+  function SelectQuestions() {
+    let options = [];
+    for (let i = 0; i < 50; i++) {
+      options.push(<option value={i} key={i}>{i}</option>);
+    }
+
+    return (
+      <>
+        <label htmlFor="questions">selecione a quantidade de questões:</label>
+        <select name="questions" key="questions" onChange={StartModal}>
+          {options}
+        </select>
+      </>
+    );
+  }
+  
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h>teste de conhecimentos gerais</h>
+      <div>
+        <SelectQuestions/>
+      </div>
     </div>
   );
 }
