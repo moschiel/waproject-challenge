@@ -3,12 +3,18 @@ import logo from './logo.svg';
 import './App.css';
 
 import api from './service/api';
+import axios from 'axios';
 import DropBoxNumberRange from './components/DropBoxNumberRange/DropBoxNumberRange';
 import SimpleModal from './components/SimpleModal/SimpleModal';
 
 function App() {
   const [modalOpen, setModalOpen] = useState(false);
+  const [selection, setSelection] = useState(1);
+  console.log("CURRENT SELECTION:", selection);
 
+  function handleDropBoxChange(e){
+    setSelection(e.target.value);
+  }
   function OpenModal() {
     console.log("OPEN MODAL");
     setModalOpen(true);
@@ -20,28 +26,39 @@ function App() {
   function StartTest() {
     console.log("START TEST");
     setModalOpen(false);
+    getQuestions();
+  }
+  async function getQuestions() {
+    console.log("GET QUESTIONS API");
+    try {
+      const {data} = await axios.get('https://opentdb.com/api.php?amount='+selection);
+      console.log(data);
+    } catch (err) {
+      console.log('Error get API: ' + err);
+    }
   }
 
   return (
     <div className="App">
-      <h>teste de conhecimentos gerais</h>
+      <h>QUIZ</h>
       <div>
         <DropBoxNumberRange
-          title= "selecione a quantidade de perguntas: "
+          title="select number of questions: "
           min={1}
           max={50}
+          onChange={handleDropBoxChange}
         />
+        <button onClick={OpenModal}>enter</button>
       </div>
-      <button onClick={OpenModal}>ok</button>
       <SimpleModal 
         open={modalOpen}
-        title="DESEJA COMEÇAR O TESTE?" 
-        nameBtn1="Iniciar" 
-        nameBtn2="Cancelar"
+        title="START QUIZ?" 
+        nameBtn1="Start" 
+        nameBtn2="Cancel"
         onClickBtn1={StartTest}
         onClickBtn2={CloseModal}
         onClose={CloseModal}
-      /> 
+      />
     </div>
   );
 }
