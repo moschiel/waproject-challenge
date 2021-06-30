@@ -1,6 +1,8 @@
+import { useState, useCallback } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import api from './service/api';
+import SimpleModal from './components/Modal/SimpleModal';
 
 function App() {
 
@@ -17,7 +19,7 @@ function App() {
     return (
       <>
         <label htmlFor="questions">selecione a quantidade de questões:</label>
-        <select name="questions" key="questions" onChange={StartModal}>
+        <select name="questions" key="questions">
           {options}
         </select>
       </>
@@ -31,6 +33,8 @@ function App() {
       <div>
         <SelectQuestions/>
       </div>
+      <button onClick={StartModal}>ok</button>
+      <SimpleModal/> 
     </div>
   );
 }
