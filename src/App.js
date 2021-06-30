@@ -1,40 +1,47 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
+
 import api from './service/api';
-import SimpleModal from './components/Modal/SimpleModal';
+import DropBoxNumberRange from './components/DropBoxNumberRange/DropBoxNumberRange';
+import SimpleModal from './components/SimpleModal/SimpleModal';
 
 function App() {
+  const [modalOpen, setModalOpen] = useState(false);
 
-  function StartModal() {
-    console.log("START MODAL");
+  function OpenModal() {
+    console.log("OPEN MODAL");
+    setModalOpen(true);
   }
-
-  function SelectQuestions() {
-    let options = [];
-    for (let i = 0; i < 50; i++) {
-      options.push(<option value={i} key={i}>{i}</option>);
-    }
-
-    return (
-      <>
-        <label htmlFor="questions">selecione a quantidade de questões:</label>
-        <select name="questions" key="questions">
-          {options}
-        </select>
-      </>
-    );
+  function CloseModal() {
+    console.log("CLOSE MODAL");
+    setModalOpen(false);
   }
-  
+  function StartTest() {
+    console.log("START TEST");
+    setModalOpen(false);
+  }
 
   return (
     <div className="App">
       <h>teste de conhecimentos gerais</h>
       <div>
-        <SelectQuestions/>
+        <DropBoxNumberRange
+          title= "selecione a quantidade de perguntas: "
+          min={1}
+          max={50}
+        />
       </div>
-      <button onClick={StartModal}>ok</button>
-      <SimpleModal/> 
+      <button onClick={OpenModal}>ok</button>
+      <SimpleModal 
+        open={modalOpen}
+        title="DESEJA COMEÇAR O TESTE?" 
+        nameBtn1="Iniciar" 
+        nameBtn2="Cancelar"
+        onClickBtn1={StartTest}
+        onClickBtn2={CloseModal}
+        onClose={CloseModal}
+      /> 
     </div>
   );
 }
