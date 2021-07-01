@@ -1,13 +1,18 @@
+import { useContext } from 'react';
 import { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-import MainView from './views/MainView/MainView';
+import { MyContext } from './context/MyContext';
 
 function App() {
-  const [view, setView] = useState(<MainView />);
+  const { view } = useContext(MyContext);
 
-  return view;
+  return (
+    <div className="App">
+      {view}
+    </div>
+  );
 }
 
 export default App;
