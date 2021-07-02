@@ -52,7 +52,7 @@ export default function MainView() {
             max={50}
             onChange={handleDropBoxChange}
           />
-          <button onClick={OpenModal}>enter</button>
+          <button onClick={OpenModal}>New Quiz</button>
         </div>
         <SimpleModal 
           open={modalOpen}
