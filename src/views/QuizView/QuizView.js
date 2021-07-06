@@ -1,66 +1,98 @@
 import { useContext, useState } from 'react';
 import { MyContext } from '../../context/MyContext';
+import MainView from '../MainView/MainView';
+
+import Question from '../../components/Question/Question';
 
 export default function QuizView() {
     const { setView, apiResult } = useContext(MyContext);
+    const QUESTION_STORAGE_KEY = '@wa-project/questions';
+
+    // const questionsStorare = localStorage.getItem(QUESTION_STORAGE_KEY);
 
     function getRandomInt(min, max) {
         min = Math.ceil(min);
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min)) + min;
     }
-    //coloca resposta certa em posição aleatória.
+    //put correct answers in a random position
     function scramble(incorrect_answers, correct_answer){
-        let scrambled_options = ['','','',''];
-        let randomPos = getRandomInt(0, 3);
-        let k=0;
-        scrambled_options.forEach((e, index)=>{
-            if(index === randomPos)
-                scrambled_options[index] = correct_answer;
+            let scrambled_answers = ['','','',''];
+            let randomPos = getRandomInt(0, 3);
+            let k=0;
+            scrambled_answers.forEach((e, index)=>{
+                if(index === randomPos)
+                    scrambled_answers[index] = correct_answer;
+                else {
+                    scrambled_answers[index] = incorrect_answers[k];
+                    k++;
+                }
+            });
+            return {
+                "answers": scrambled_answers,
+                "correctAnswer": randomPos
+            };
+        
+    }
+    function createQuestionStorage() {
+        let questionsStorage = [];
+        apiResult.forEach((e, i) => {
+            if(e.type === 'multiple') {
+                let scrambled = scramble(e.incorrect_answers, e.correct_answer);
+                questionsStorage.push({
+                    "index": i,
+                    "title": e.question,
+                    "answers": scrambled.answers,
+                    "correct_answer": scrambled.correct_answer,
+                    "user_answer": ""
+                });
+            }
+            else if(e.type === 'boolean') {
+                console.log(e.correct_answer);
+                questionsStorage.push({
+                    "index": i,
+                    "title": e.question,
+                    "answers": ["True", "False"],
+                    "correct_answer": (e.correct_answer==="True"? 0 : 1),
+                    "user_answer": ""
+                });
+            }
             else {
-                scrambled_options[index] = incorrect_answers[k];
-                k++;
+                console.log("ERRO: createQuestionStorage");
+                alert("ERRO: createQuestionStorage");
             }
         });
-        return scrambled_options;
+        
+        localStorage.setItem(QUESTION_STORAGE_KEY, JSON.stringify(questionsStorage));
+        return questionsStorage;
     }
-    function Questions() {
-        let questions = [];
-        apiResult.forEach((e, index) => {
-            console.log(e.type);
-            
-            if(e.type == 'multiple') {
-                let options = scramble(e.incorrect_answers, e.correct_answer);
-                console.log(options);
-                questions.push(
-                    <>
-                    <div>{index} - {e.question}</div>
-                    <div>A) {options[0]}</div>
-                    <div>B) {options[1]}</div>
-                    <div>C) {options[2]}</div>
-                    <div>D) {options[3]}</div>
-                    </>
-                );
-            }
-            else if(e.type == 'boolean') {
-                questions.push(
-                    <>
-                    <div>{index} - {e.question}</div>
-                    <div>A) True </div>
-                    <div>B) False </div>
-                    </>
-                );
-            }
-            else {
-                questions.push(<div>!!! ERRO ERRO !!!</div>);
-            }
+
+    //iterate over questions
+    function QuestionsList() {
+        let QuestionsComponent = [];
+        let questionsStorage = createQuestionStorage(); //readQuestionStorage
+
+        questionsStorage.forEach((question)=>{
+            //push question component
+            QuestionsComponent.push(
+                <Question question={question}/>
+            );
         });
-        return questions;
+
+        return (
+            <div>
+                <ul>{QuestionsComponent}</ul>
+            </div>
+        );
     }
+
+
 
     return (
         <div>
-            <Questions />
+            <QuestionsList />
+            <button onClick={()=>setView(<MainView />)}>return</button>
+            <button onClick={()=>setView(<ResultsView />)}>complete</button>
         </div>
     );
 }
