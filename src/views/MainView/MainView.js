@@ -6,12 +6,12 @@ import SimpleModal from '../../components/SimpleModal/SimpleModal';
 import QuizView from '../QuizView/QuizView';
 import { MyContext } from '../../context/MyContext';
 
+const QUESTION_STORAGE_KEY = '@wa-project/questions';
+
 export default function MainView() {
   const { setView, setApiResult } = useContext(MyContext);
   const [modalOpen, setModalOpen] = useState(false);
   const [selection, setSelection] = useState(1);
-
-  console.log("CURRENT SELECTION:", selection);
 
   function handleDropBoxChange(e){
       setSelection(e.target.value);
@@ -24,27 +24,49 @@ export default function MainView() {
       console.log("CLOSE MODAL");
       setModalOpen(false);
   }
-  async function StartTest() {
+  async function StartTest(newQuiz) {
       console.log("START TEST");
-      await getQuestions();
-      setModalOpen(false);
+      if(newQuiz) { //start a new quiz
+        let req = await getApiQuestions();
+        if(req.ok) {  
+          setApiResult(req.results);
+          setModalOpen(false);
+          setView(<QuizView/>);
+        }else {
+          setApiResult(null);
+          console.log('Error get API: ' + req.err);
+          alert('Error get API: ' + req.err);
+        }
+      }else { //continue previous quiz
+        setApiResult(null);
+        setView(<QuizView/>);
+      }
   }
-  async function getQuestions() {
+  async function getApiQuestions() {
+      // console.log(localStorage.getItem("QUESTION_STORAGE_KEY"));
       console.log("GET QUESTIONS API");
       try {
         const {data} = await axios.get('https://opentdb.com/api.php?amount='+selection);
-        console.log(data.results);
-        setApiResult(data.results);
-        setView(<QuizView/>);
+        return {"ok":true, "results":data.results};
       } catch (err) {
-        console.log('Error get API: ' + err);
-        alert('Error get API: ' + err);
+        return {"ok":false, "err":err}
       }
-    }
+  }
 
+  function existLocalQuestions() {
+    console.log("GET QUESTIONS LOCAL");
+    return (localStorage.getItem(QUESTION_STORAGE_KEY) != null);
+  }
+  
+  console.log("CURRENT SELECTION:", selection);
+
+  let continueButton = <></>;
+  if(existLocalQuestions())
+    continueButton = <button onClick={()=>{StartTest(false)}}>continue last quiz</button>
+  
   return (
       <div>
-        <h>QUIZ</h>
+        <h1>QUIZ</h1>
         <div>
           <DropBoxNumberRange
             title="select number of questions: "
@@ -52,14 +74,15 @@ export default function MainView() {
             max={50}
             onChange={handleDropBoxChange}
           />
-          <button onClick={OpenModal}>New Quiz</button>
+          <button onClick={OpenModal}>start new quiz</button>
+          {continueButton}
         </div>
         <SimpleModal 
           open={modalOpen}
           title="START QUIZ?" 
           nameBtn1="Start" 
           nameBtn2="Cancel"
-          onClickBtn1={StartTest}
+          onClickBtn1={()=>{StartTest(true)}}
           onClickBtn2={CloseModal}
           onClose={CloseModal}
         />

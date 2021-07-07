@@ -1,13 +1,12 @@
-import { MyContext } from '../../context/MyContext';
 const QUESTION_STORAGE_KEY = '@wa-project/questions';
 
 function saveAnswer(questionIdx, answerIdx){
     //update question storage
     let questionsStorage = JSON.parse(localStorage.getItem(QUESTION_STORAGE_KEY));
-    questionsStorage[questionIdx].userAnswer = answerIdx;
+    questionsStorage[questionIdx].user_answer = answerIdx;
     localStorage.setItem(QUESTION_STORAGE_KEY, JSON.stringify(questionsStorage));
     //update question style
-    let elems = document.querySelectorAll(`ul#ans_${questionIdx} li`);
+    let elems = document.querySelectorAll(`ul#answer_${questionIdx} li`);
     elems.forEach((e) => {                  //reset answers style
         e.style.color = 'black';
     });
@@ -18,22 +17,27 @@ function saveAnswer(questionIdx, answerIdx){
 export default function Question(props){
     let answersComponent=[];
     props.question.answers.forEach((answer, answerIdx)=>{
-        let id = `ans_${props.question.index}_${answerIdx}`;
+        let id = `answer_${props.question.index}_${answerIdx}`;
+        let userAnswer = props.question.user_answer;
+        // console.log(props.question)
         answersComponent.push(
-            <li key={id} id={id} onClick={()=>saveAnswer(props.question.index, answerIdx)}>
+            <li key={id} 
+                id={id}
+                style={{color:userAnswer===answerIdx?"blue":"black"}} 
+                onClick={()=>saveAnswer(props.question.index, answerIdx)}>
                 <div>{answer}</div>
             </li>
         );
     });
 
     return (
-        <li key={`quest_${props.question.index}`}>
+        <div>
             <div>{props.question.index} - {props.question.title}</div>
             <div>
-                <ul id={`ans_${props.question.index}`}>
+                <ul id={`answer_${props.question.index}`}>
                     {answersComponent}
                 </ul>
             </div> 
-        </li>
+        </div>
     );
 }

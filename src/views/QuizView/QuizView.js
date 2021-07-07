@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { MyContext } from '../../context/MyContext';
 import MainView from '../MainView/MainView';
-
+import ResultsView from '../ResultsView/ResultsView';
 import Question from '../../components/Question/Question';
 
 export default function QuizView() {
@@ -17,65 +17,74 @@ export default function QuizView() {
     }
     //put correct answers in a random position
     function scramble(incorrect_answers, correct_answer){
-            let scrambled_answers = ['','','',''];
-            let randomPos = getRandomInt(0, 3);
-            let k=0;
-            scrambled_answers.forEach((e, index)=>{
-                if(index === randomPos)
-                    scrambled_answers[index] = correct_answer;
-                else {
-                    scrambled_answers[index] = incorrect_answers[k];
-                    k++;
-                }
-            });
-            return {
-                "answers": scrambled_answers,
-                "correctAnswer": randomPos
-            };
-        
-    }
-    function createQuestionStorage() {
-        let questionsStorage = [];
-        apiResult.forEach((e, i) => {
-            if(e.type === 'multiple') {
-                let scrambled = scramble(e.incorrect_answers, e.correct_answer);
-                questionsStorage.push({
-                    "index": i,
-                    "title": e.question,
-                    "answers": scrambled.answers,
-                    "correct_answer": scrambled.correct_answer,
-                    "user_answer": ""
-                });
-            }
-            else if(e.type === 'boolean') {
-                console.log(e.correct_answer);
-                questionsStorage.push({
-                    "index": i,
-                    "title": e.question,
-                    "answers": ["True", "False"],
-                    "correct_answer": (e.correct_answer==="True"? 0 : 1),
-                    "user_answer": ""
-                });
-            }
+        let scrambled_answers = ['','','',''];
+        let randomPos = getRandomInt(0, 3);
+        let k=0;
+        scrambled_answers.forEach((e, index)=>{
+            if(index === randomPos)
+                scrambled_answers[index] = correct_answer;
             else {
-                console.log("ERRO: createQuestionStorage");
-                alert("ERRO: createQuestionStorage");
+                scrambled_answers[index] = incorrect_answers[k];
+                k++;
             }
         });
+        return {
+            "answers": scrambled_answers,
+            "correct_answer": randomPos
+        };
+    }
+    
+    function createQuestionStorage() {
+        let questionsStorage = [];
+
+        if(apiResult != null) { //aloca novo quiz
+            apiResult.forEach((e, i) => {
+                if(e.type === 'multiple') {
+                    let scrambled = scramble(e.incorrect_answers, e.correct_answer);
+                    questionsStorage.push({
+                        "index": i,
+                        "title": e.question,
+                        "answers": scrambled.answers,
+                        "correct_answer": scrambled.correct_answer,
+                        "user_answer": ""
+                    });
+                }
+                else if(e.type === 'boolean') {
+                    console.log(e.correct_answer);
+                    questionsStorage.push({
+                        "index": i,
+                        "title": e.question,
+                        "answers": ["True", "False"],
+                        "correct_answer": (e.correct_answer==="True"? 0 : 1),
+                        "user_answer": ""
+                    });
+                }
+                else {
+                    console.log("ERRO: createQuestionStorage");
+                    alert("ERRO: createQuestionStorage");
+                }
+            });
+            
+            localStorage.setItem(QUESTION_STORAGE_KEY, JSON.stringify(questionsStorage));
+        }
+        else { //carrega quiz antigo
+            questionsStorage = JSON.parse(localStorage.getItem(QUESTION_STORAGE_KEY));
+        }
         
-        localStorage.setItem(QUESTION_STORAGE_KEY, JSON.stringify(questionsStorage));
         return questionsStorage;
     }
 
     //iterate over questions
     function QuestionsList() {
         let QuestionsComponent = [];
-        let questionsStorage = createQuestionStorage(); //readQuestionStorage
+        let questionsStorage = createQuestionStorage();
 
         questionsStorage.forEach((question)=>{
             //push question component
             QuestionsComponent.push(
-                <Question question={question}/>
+                <li key={`question_${question.index}`}>
+                    <Question question={question}/>
+                </li>
             );
         });
 
@@ -87,12 +96,11 @@ export default function QuizView() {
     }
 
 
-
     return (
         <div>
             <QuestionsList />
+            <button onClick={()=>setView(<ResultsView />)}>finish</button>
             <button onClick={()=>setView(<MainView />)}>return</button>
-            <button onClick={()=>setView(<ResultsView />)}>complete</button>
         </div>
     );
 }
