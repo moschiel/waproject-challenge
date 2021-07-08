@@ -1,0 +1,19 @@
+h1 {
+    color:gray;
+    text-transform: capitalize;
+    width: fit-content;
+    border: 2px solid gray;
+    margin: 20px auto;
+    margin-bottom: 40px;
+    padding: 5px 60px;
+    border-radius: 5px;
+}
+
+.mainViewButton {
+    width: 300px;
+    height: 80px;
+    font-size: 20px;
+    margin-top: 20px;
+    text-transform: uppercase;
+    cursor: pointer;
+}

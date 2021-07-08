@@ -1,4 +1,9 @@
+import { useContext, useState } from 'react';
+import { MyContext } from '../../context/MyContext';
+import MainView from '../MainView/MainView';
+
 export default function ResultsView() {
+    const { setView } = useContext(MyContext);
     const QUESTION_STORAGE_KEY = '@wa-project/questions';
 
     let questionsStorage = JSON.parse(localStorage.getItem(QUESTION_STORAGE_KEY)); 
@@ -20,5 +25,12 @@ export default function ResultsView() {
         );
     });
 
-    return Results;
+    return (
+        <div>
+            <ul>
+                {Results}
+            </ul>
+            <button onClick={()=>setView(<MainView />)}>return</button>
+        </div>
+    );
 }

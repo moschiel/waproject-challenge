@@ -5,6 +5,7 @@ import DropBoxNumberRange from '../../components/DropBoxNumberRange/DropBoxNumbe
 import SimpleModal from '../../components/SimpleModal/SimpleModal';
 import QuizView from '../QuizView/QuizView';
 import { MyContext } from '../../context/MyContext';
+import './MainView.scss';
 
 const QUESTION_STORAGE_KEY = '@wa-project/questions';
 
@@ -38,8 +39,12 @@ export default function MainView() {
           alert('Error get API: ' + req.err);
         }
       }else { //continue previous quiz
-        setApiResult(null);
-        setView(<QuizView/>);
+        if(existLocalQuestions()) {
+          setApiResult(null);
+          setView(<QuizView/>);
+        }else {
+          alert("Error: there isn't previous quiz stored!");
+        }
       }
   }
   async function getApiQuestions() {
@@ -62,11 +67,15 @@ export default function MainView() {
 
   let continueButton = <></>;
   if(existLocalQuestions())
-    continueButton = <button onClick={()=>{StartTest(false)}}>continue last quiz</button>
+    continueButton = (
+    <button className="mainViewButton" 
+      onClick={()=>{StartTest(false)}}>
+        continue last quiz
+    </button>);
   
   return (
       <div>
-        <h1>QUIZ</h1>
+        <h1>general knowledge quiz</h1>
         <div>
           <DropBoxNumberRange
             title="select number of questions: "
@@ -74,12 +83,16 @@ export default function MainView() {
             max={50}
             onChange={handleDropBoxChange}
           />
-          <button onClick={OpenModal}>start new quiz</button>
-          {continueButton}
+          <div>
+            <button className="mainViewButton" onClick={OpenModal}>start new quiz</button>
+          </div>
+          <div>
+            {continueButton}
+          </div>
         </div>
         <SimpleModal 
           open={modalOpen}
-          title="START QUIZ?" 
+          title="Attention, this action will erase previous quiz!" 
           nameBtn1="Start" 
           nameBtn2="Cancel"
           onClickBtn1={()=>{StartTest(true)}}

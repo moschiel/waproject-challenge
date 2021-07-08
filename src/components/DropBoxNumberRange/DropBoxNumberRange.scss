@@ -1,0 +1,21 @@
+.dropBox {
+    // border: 1px solid black;
+    width: 50%;
+    margin: auto;
+    display: flex;
+    // justify-items: center;
+    justify-content: center;
+    align-items: center;
+    label {
+        text-transform: uppercase;
+        margin-right: 10px;
+        font-size: 25px;
+    }
+    select {
+        // margin: auto;
+        // border: 1px solid red;
+        // justify-self: center;
+        height: 30px;
+        font-size: 20px;
+    }
+}

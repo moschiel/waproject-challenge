@@ -1,3 +1,5 @@
+import './DropBoxNumberRange.scss';
+
 export default function DropBoxNumberRange( props ) {
   console.log("RENDER SELECT LIST");
   let options = [];
@@ -10,7 +12,7 @@ export default function DropBoxNumberRange( props ) {
   }
 
   return (
-    <div>
+    <div className='dropBox'>
       <label htmlFor="questions">{props.title}</label>
       <select name="questions" key="questions" onChange={(e)=>{handleChange(e)}}>
         {options}

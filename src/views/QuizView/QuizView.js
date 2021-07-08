@@ -8,8 +8,6 @@ export default function QuizView() {
     const { setView, apiResult } = useContext(MyContext);
     const QUESTION_STORAGE_KEY = '@wa-project/questions';
 
-    // const questionsStorare = localStorage.getItem(QUESTION_STORAGE_KEY);
-
     function getRandomInt(min, max) {
         min = Math.ceil(min);
         max = Math.floor(max);
