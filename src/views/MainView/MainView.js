@@ -74,7 +74,7 @@ export default function MainView() {
     </button>);
   
   return (
-      <div>
+      <div className="mainView">
         <h1>general knowledge quiz</h1>
         <div>
           <DropBoxNumberRange

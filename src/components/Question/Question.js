@@ -1,3 +1,6 @@
+import {decode} from 'html-entities';
+import './Question.scss';
+
 const QUESTION_STORAGE_KEY = '@wa-project/questions';
 
 function saveAnswer(questionIdx, answerIdx){
@@ -8,9 +11,9 @@ function saveAnswer(questionIdx, answerIdx){
     //update question style
     let elems = document.querySelectorAll(`ul#answer_${questionIdx} li`);
     elems.forEach((e) => {                  //reset answers style
-        e.style.color = 'black';
+        e.classList.remove('answer-selected');
     });
-    elems[answerIdx].style.color = 'blue'; // set chosen answer style
+    elems[answerIdx].classList.add('answer-selected'); // set chosen answer style
 }
 
 //iterate over answers
@@ -19,20 +22,26 @@ export default function Question(props){
     props.question.answers.forEach((answer, answerIdx)=>{
         let id = `answer_${props.question.index}_${answerIdx}`;
         let userAnswer = props.question.user_answer;
-        // console.log(props.question)
+        let className;
+        if(userAnswer === answerIdx)
+            className = 'answer answer-selected';
+        else
+            className = 'answer';
+        
         answersComponent.push(
-            <li key={id} 
+            <li 
+                className={className}
+                key={id} 
                 id={id}
-                style={{color:userAnswer===answerIdx?"blue":"black"}} 
                 onClick={()=>saveAnswer(props.question.index, answerIdx)}>
-                <div>{answer}</div>
+                <p>{decode(answer)}</p>
             </li>
         );
     });
 
     return (
-        <div>
-            <div>{props.question.index} - {props.question.title}</div>
+        <div className='question'>
+            <p className='title'>{props.question.index+1} - {decode(props.question.title)}</p>
             <div>
                 <ul id={`answer_${props.question.index}`}>
                     {answersComponent}

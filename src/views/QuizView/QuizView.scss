@@ -1,0 +1,39 @@
+* {
+    box-sizing: border-box;
+}
+
+.quizView{
+    h1 {
+        color:gray;
+        text-transform: capitalize;
+        width: fit-content;
+        // border: 2px solid gray;
+        margin: 20px auto;
+        // margin-bottom: 40px;
+        // padding: 5px 60px;
+        // border-radius: 5px;
+    }
+
+    .questionList {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 50px;
+        ul {
+            list-style: none;
+        }
+    }
+    
+    .quizButtons{
+        border-top: 1px solid #CCCCCC;
+        position: fixed;
+        bottom: 0px;
+        width: 100%;
+        background-color: rgb(250, 227, 250);
+        button {
+            font: 1em/150% Helvetica, Arial, sans-serif;
+            width: 200px;
+            margin: 10px 30px;
+            text-transform: uppercase;
+        }
+    }
+}

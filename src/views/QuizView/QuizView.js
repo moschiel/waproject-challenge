@@ -3,6 +3,7 @@ import { MyContext } from '../../context/MyContext';
 import MainView from '../MainView/MainView';
 import ResultsView from '../ResultsView/ResultsView';
 import Question from '../../components/Question/Question';
+import './QuizView.scss';
 
 export default function QuizView() {
     const { setView, apiResult } = useContext(MyContext);
@@ -87,18 +88,23 @@ export default function QuizView() {
         });
 
         return (
-            <div>
-                <ul>{QuestionsComponent}</ul>
+            <div className='questionList'>
+                <ul>
+                    {QuestionsComponent}
+                </ul>
             </div>
         );
     }
 
 
     return (
-        <div>
+        <div className="quizView">
+            <h1>general knowledge quiz</h1>
             <QuestionsList />
-            <button onClick={()=>setView(<ResultsView />)}>finish</button>
-            <button onClick={()=>setView(<MainView />)}>return</button>
+            <div className='quizButtons'>
+                <button onClick={()=>setView(<MainView />)}>return</button>
+                <button onClick={()=>setView(<ResultsView />)}>finish</button>
+            </div>
         </div>
     );
 }

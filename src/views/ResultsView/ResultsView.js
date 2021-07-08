@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react';
 import { MyContext } from '../../context/MyContext';
 import MainView from '../MainView/MainView';
+import './ResultsView.scss';
 
 export default function ResultsView() {
     const { setView } = useContext(MyContext);
@@ -11,7 +12,7 @@ export default function ResultsView() {
 
     questionsStorage.forEach(question => {
         Results.push(
-            <li key={`question_${question}`}>
+            <li className='questionResult' key={`question_${question}`}>
                 <p>{question.title}</p>
                 <div>
                     <p>your anwser</p>
@@ -26,7 +27,7 @@ export default function ResultsView() {
     });
 
     return (
-        <div>
+        <div className='ResultsView'>
             <ul>
                 {Results}
             </ul>
