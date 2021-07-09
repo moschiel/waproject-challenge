@@ -70,7 +70,7 @@ export default function MainView() {
   }
   function existLocalResults() {
     console.log("GET RESULTS LOCAL");
-    return (localStorage.getItem(RESULTS_STORAGE_KEY) == 'true');
+    return (localStorage.getItem(RESULTS_STORAGE_KEY) === 'true');
   }
   
   console.log("CURRENT SELECTION:", selection);

@@ -6,7 +6,6 @@ import './ResultsView.scss';
 import tickImg from './images/tick.png';
 import wrongImg from './images/wrong.png';
 
-{/* <div>Icons made by <a href="" title="xnimrodx">xnimrodx</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div> */}
 
 export default function ResultsView() {
     const { setView } = useContext(MyContext);
