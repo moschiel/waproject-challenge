@@ -35,5 +35,11 @@
             margin: 10px 30px;
             text-transform: uppercase;
         }
+        button:first-child{
+            background-color: rgb(142, 142, 250);
+        }
+        button:last-child{
+           background-color: rgb(135, 241, 102);
+        }
     }
 }

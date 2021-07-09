@@ -1,7 +1,16 @@
+* {
+    box-sizing: border-box;
+}
+
 .ResultsView{
-    font: 1em/150% Helvetica, Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     ul{
         list-style: none;
+        width: 500px;
+        margin-bottom: 100px;
         li.questionResult{
             box-shadow: 4px 4px 4px 0px rgb(214,214,214);
             padding: 10px;
@@ -9,7 +18,55 @@
             // clear: left;
             margin-top: 20px;
             background-color: #EEEEEE;
-            width: 500px;
+            // width: 500px;
+            .title{
+                // border: 1px solid black;
+                width: 100%;
+                text-align: left;
+                display: flex;
+                flex-direction: row;
+                // justify-content: center;
+                align-items: center;
+                img {
+                    margin-right: 10px;
+                }
+            }
+            table{
+                // border: 1px solid #CCCCCC;
+                // width: calc(100% - 10px);
+                // margin: 5px;
+                // padding: 0px 10px;
+                background-color: white;
+                // cursor: pointer;
+                font-family: arial, sans-serif;
+                border-collapse: collapse;
+                width: 100%;
+                td, th {
+                    border: 1px solid black;
+                    text-align: left;
+                    padding: 8px;
+                }
+                th:first-child, td:first-child{
+                    background-color: rgb(246, 164, 164);
+                }
+                th:last-child, td:last-child{
+                    background-color: rgb(135, 241, 102);
+                }
+            }
+        }
+    }
+    div.buttons{
+        border-top: 1px solid #CCCCCC;
+        position: fixed;
+        bottom: 0px;
+        width: 100%;
+        background-color: rgb(250, 227, 250);
+        button {
+            font: 1em/150% Helvetica, Arial, sans-serif;
+            width: 200px;
+            margin: 10px 30px;
+            text-transform: uppercase;
+            background-color: rgb(142, 142, 250);
         }
     }
 }

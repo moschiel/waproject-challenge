@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { MyContext } from '../../context/MyContext';
 import MainView from '../MainView/MainView';
 import ResultsView from '../ResultsView/ResultsView';
